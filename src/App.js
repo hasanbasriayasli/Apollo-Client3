@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
 
+const GET_RATES = gql`
+    {
+      rates(currency:"USD"){
+        currency
+        rate
+      }
+    }
+`
 function App() {
+  const { data, loading, error } = useQuery(GET_RATES);
+  if (loading) return <p>Loading..!</p>
+  if (error) return <p>Whoops ... something is wrong..!</p>
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={divStyle}>
+      {
+        data?.rates.map(item => <span key={item?.currency} style={style}>{item?.currency + " " + item?.rate}</span>)
+      }
     </div>
   );
 }
 
 export default App;
+
+const divStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  marginTop: "10px"
+}
+const style = {
+  display: 'inline-block',
+  width: "240px",
+  margin: "5px",
+  backgroundColor: "red",
+  borderRadius: "3px"
+}
