@@ -9,7 +9,7 @@ const GET_RATES = gql`
       }
     }
 `
-function App() {
+const App = () => {
   const { data, loading, error } = useQuery(GET_RATES);
   if (loading) return <p>Loading..!</p>
   if (error) return <p>Whoops ... something is wrong..!</p>
